@@ -29,9 +29,14 @@ struct MapView: View {
             }
             
             // Business markers
-            ForEach(selectedBusiness == nil ? SampleData.businesses : [selectedBusiness!]) { business in
-                Annotation(business.name, coordinate: business.coordinate.clCoordinate) {
-                    BusinessMarkerView(business: business) {
+            ForEach(SampleData.businesses) { business in
+                let isHidden = selectedBusiness != nil && selectedBusiness?.id != business.id
+                Annotation(isHidden ? "" : business.name, coordinate: business.coordinate.clCoordinate) {
+                    BusinessMarkerView(
+                        business: business,
+                        isSelected: selectedBusiness?.id == business.id,
+                        isHidden: isHidden
+                    ) {
                         selectedBusiness = business
                     }
                 }
@@ -56,17 +61,18 @@ struct MapView: View {
         }
         .onChange(of: selectedBusiness) {
             if let business = selectedBusiness {
-                withAnimation(.easeInOut(duration: 0.5)) {
-                    // Offset the center downward to shift the marker up into the visible top 1/3
-                    // The sheet covers 2/3 from bottom, so we shift center down by ~0.004 degrees
-                    let offsetCenter = CLLocationCoordinate2D(
-                        latitude: business.coordinate.clCoordinate.latitude - 0.004,
-                        longitude: business.coordinate.clCoordinate.longitude
-                    )
+                // Offset the center downward to shift the marker up into the visible top 1/3
+                // The sheet covers 2/3 from bottom, so we shift center down by ~0.0025 degrees
+                let offsetCenter = CLLocationCoordinate2D(
+                    latitude: business.coordinate.clCoordinate.latitude - 0.0025,
+                    longitude: business.coordinate.clCoordinate.longitude
+                )
+                var transaction = Transaction(animation: .easeInOut(duration: 0.9))
+                withTransaction(transaction) {
                     position = .region(
                         MKCoordinateRegion(
                             center: offsetCenter,
-                            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                            span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
                         )
                     )
                 }
@@ -138,6 +144,8 @@ struct DirectionalCone: Shape {
 // Business marker view
 struct BusinessMarkerView: View {
     let business: Business
+    let isSelected: Bool
+    let isHidden: Bool
     let onTap: () -> Void
     
     var body: some View {
@@ -148,18 +156,20 @@ struct BusinessMarkerView: View {
                     Circle()
                         .fill(Color.white)
                         .frame(width: 36, height: 36)
-                        .opacity(0.7)
+                        //.opacity(0.7)
                         .shadow(color: Color.black.opacity(0.15), radius: 3, x: 0, y: 1)
                     
                     // Emoji from business data
                     Text(business.emoji)
                         .font(.system(size: 18))
-                        .opacity(0.8)
+                        //.opacity(0.8)
                 }
             }
         }
-        .scaleEffect(1.0)
-        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: business.id)
+        .opacity(isHidden ? 0.0 : (isSelected ? 1.0 : 0.8))
+        .scaleEffect(isHidden ? 0.5 : (isSelected ? 1.2 : 1.0))
+        .animation(.spring(response: 0.4, dampingFraction: 0.7), value: isSelected)
+        .animation(.easeInOut(duration: 0.3), value: isHidden)
     }
 }
 

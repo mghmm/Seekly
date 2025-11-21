@@ -10,15 +10,25 @@ import SwiftUI
 struct ContentView: View {
     @State private var searchText = ""
     @State private var showingSearchSheet = false
+    @FocusState private var isTextFieldFocused: Bool
 
     var body: some View {
         ZStack(alignment: .bottom) {
             MapView()
             
+            // Invisible tap area to dismiss keyboard
+            Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    isTextFieldFocused = false
+                }
+                .allowsHitTesting(isTextFieldFocused)
+            
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.secondary)
                 TextField("What are you looking for?", text: $searchText)
+                    .focused($isTextFieldFocused)
                 
                 Button(action: {
                     showingSearchSheet = true
