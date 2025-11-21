@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var searchText = ""
+    @State private var showingSearchSheet = false
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -20,7 +21,7 @@ struct ContentView: View {
                 TextField("What are you looking for?", text: $searchText)
                 
                 Button(action: {
-                    // TODO: Implement search action
+                    showingSearchSheet = true
                 }) {
                     Image(systemName: "arrow.right")
                         .font(.system(size: 16, weight: .semibold))
@@ -44,6 +45,9 @@ struct ContentView: View {
             .clipShape(Capsule())
             .shadow(radius: 4)
             .padding()
+        }
+        .sheet(isPresented: $showingSearchSheet) {
+            SearchSheet(searchQuery: searchText)
         }
     }
 }
