@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-struct Business: Identifiable, Codable {
+struct Business: Identifiable, Codable, Equatable {
     let id: String
     let name: String
     let category: String
@@ -23,7 +23,7 @@ struct Business: Identifiable, Codable {
     let phoneNumber: String?
     let emoji: String
     
-    struct Coordinate: Codable {
+    struct Coordinate: Codable, Equatable {
         let latitude: Double
         let longitude: Double
         

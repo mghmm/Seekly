@@ -17,6 +17,7 @@ struct MapView: View {
         )
     )
     @State private var hasInitializedLocation = false
+    @State private var selectedBusiness: Business?
     
     var body: some View {
         Map(position: $position, content: {
@@ -28,9 +29,11 @@ struct MapView: View {
             }
             
             // Business markers
-            ForEach(SampleData.businesses) { business in
+            ForEach(selectedBusiness == nil ? SampleData.businesses : [selectedBusiness!]) { business in
                 Annotation(business.name, coordinate: business.coordinate.clCoordinate) {
-                    BusinessMarkerView(business: business)
+                    BusinessMarkerView(business: business) {
+                        selectedBusiness = business
+                    }
                 }
             }
         })
@@ -49,6 +52,29 @@ struct MapView: View {
                     )
                 )
                 hasInitializedLocation = true
+            }
+        }
+        .onChange(of: selectedBusiness) {
+            if let business = selectedBusiness {
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    // Offset the center downward to shift the marker up into the visible top 1/3
+                    // The sheet covers 2/3 from bottom, so we shift center down by ~0.004 degrees
+                    let offsetCenter = CLLocationCoordinate2D(
+                        latitude: business.coordinate.clCoordinate.latitude - 0.004,
+                        longitude: business.coordinate.clCoordinate.longitude
+                    )
+                    position = .region(
+                        MKCoordinateRegion(
+                            center: offsetCenter,
+                            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                        )
+                    )
+                }
+            }
+        }
+        .sheet(item: $selectedBusiness) { business in
+            BusinessDetailSheet(business: business) {
+                selectedBusiness = nil
             }
         }
     }
@@ -112,23 +138,28 @@ struct DirectionalCone: Shape {
 // Business marker view
 struct BusinessMarkerView: View {
     let business: Business
+    let onTap: () -> Void
     
     var body: some View {
-        VStack(spacing: 0) {
-            ZStack {
-                // White background circle
-                Circle()
-                    .fill(Color.white)
-                    .frame(width: 36, height: 36)
-                    .opacity(0.7)
-                    .shadow(color: Color.black.opacity(0.15), radius: 3, x: 0, y: 1)
-                
-                // Emoji from business data
-                Text(business.emoji)
-                    .font(.system(size: 18))
-                    .opacity(0.8)
+        Button(action: onTap) {
+            VStack(spacing: 0) {
+                ZStack {
+                    // White background circle
+                    Circle()
+                        .fill(Color.white)
+                        .frame(width: 36, height: 36)
+                        .opacity(0.7)
+                        .shadow(color: Color.black.opacity(0.15), radius: 3, x: 0, y: 1)
+                    
+                    // Emoji from business data
+                    Text(business.emoji)
+                        .font(.system(size: 18))
+                        .opacity(0.8)
+                }
             }
         }
+        .scaleEffect(1.0)
+        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: business.id)
     }
 }
 
