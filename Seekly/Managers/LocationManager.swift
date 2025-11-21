@@ -15,8 +15,13 @@ class LocationManager: NSObject, ObservableObject {
     @Published var userHeading: CLHeading?
     @Published var authorizationStatus: CLAuthorizationStatus?
     
+    // Default location: Melbourne CBD REMOVE!!!!!!
+    private let defaultLocation = CLLocationCoordinate2D(latitude: -37.8136, longitude: 144.9631)
+    
     override init() {
         super.init()
+        // Set default location to Melbourne CBD REMOVE!!!!!!
+        userLocation = defaultLocation
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()

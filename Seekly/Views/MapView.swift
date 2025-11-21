@@ -20,9 +20,17 @@ struct MapView: View {
     
     var body: some View {
         Map(position: $position, content: {
+            // User location marker
             if let location = locationManager.userLocation {
                 Annotation("", coordinate: location) {
                     UserLocationView(heading: locationManager.userHeading?.trueHeading)
+                }
+            }
+            
+            // Business markers
+            ForEach(SampleData.businesses) { business in
+                Annotation(business.name, coordinate: business.coordinate.clCoordinate) {
+                    BusinessMarkerView(business: business)
                 }
             }
         })
@@ -98,6 +106,29 @@ struct DirectionalCone: Shape {
         path.closeSubpath()
         
         return path
+    }
+}
+
+// Business marker view
+struct BusinessMarkerView: View {
+    let business: Business
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            ZStack {
+                // White background circle
+                Circle()
+                    .fill(Color.white)
+                    .frame(width: 36, height: 36)
+                    .opacity(0.7)
+                    .shadow(color: Color.black.opacity(0.15), radius: 3, x: 0, y: 1)
+                
+                // Emoji from business data
+                Text(business.emoji)
+                    .font(.system(size: 18))
+                    .opacity(0.8)
+            }
+        }
     }
 }
 
