@@ -19,28 +19,28 @@ struct MapView: View {
     @State private var hasInitializedLocation = false
     
     var body: some View {
-        Map(position: $position, content: mapContent)
-            .mapStyle(.standard(elevation: .realistic))
-            .ignoresSafeArea()
-            .onReceive(locationManager.$userLocation) { location in
-                // Only center on user location once, on initial load
-                if let location = location, !hasInitializedLocation {
-                    position = .region(
-                        MKCoordinateRegion(
-                            center: location,
-                            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-                        )
-                    )
-                    hasInitializedLocation = true
+        Map(position: $position, content: {
+            if let location = locationManager.userLocation {
+                Annotation("", coordinate: location) {
+                    UserLocationView(heading: locationManager.userHeading?.trueHeading)
                 }
             }
-    }
-    
-    @MapContentBuilder
-    private func mapContent() -> some MapContent {
-        if let location = locationManager.userLocation {
-            Annotation("", coordinate: location) {
-                UserLocationView(heading: locationManager.userHeading?.trueHeading)
+        })
+        .mapStyle(.standard(elevation: .realistic, pointsOfInterest: .excludingAll))
+        .mapControls {
+            // Hide all default controls including compass
+        }
+        .ignoresSafeArea()
+        .onReceive(locationManager.$userLocation) { location in
+            // Only center on user location once, on initial load
+            if let location = location, !hasInitializedLocation {
+                position = .region(
+                    MKCoordinateRegion(
+                        center: location,
+                        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                    )
+                )
+                hasInitializedLocation = true
             }
         }
     }
