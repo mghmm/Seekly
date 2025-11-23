@@ -66,7 +66,7 @@ struct ContentView: View {
                     }
                 }
                 .padding(.trailing, 16)
-                .padding(.top, 60)
+                .padding(.top, 16)
                 
                 Spacer()
             }

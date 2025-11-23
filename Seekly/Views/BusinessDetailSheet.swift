@@ -139,10 +139,11 @@ struct BusinessDetailSheet: View {
                 }
             }
         }
-        .presentationDetents([.fraction(0.67)])
+        .presentationDetents([.fraction(0.67), .large])
         .presentationDragIndicator(.visible)
         .presentationBackgroundInteraction(.enabled)
         .interactiveDismissDisabled(false)
+        .presentationBackground(.white)
     }
 }
 
