@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var searchText = ""
     @State private var showingSearchSheet = false
     @State private var navigateToProfile = false
+    @State private var navigateToNotifications = false
     @FocusState private var isTextFieldFocused: Bool
     @State private var recenterTrigger = false
 
@@ -27,23 +28,41 @@ struct ContentView: View {
                 }
                 .allowsHitTesting(isTextFieldFocused)
             
-            // Profile button (top right)
+            // Profile and Activity buttons (top right)
             VStack {
                 HStack {
                     Spacer()
-                    Button(action: {
-                        navigateToProfile = true
-                    }) {
-                        Image("ProfilePicture")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 44, height: 44)
-                            .clipShape(Circle())
-                            .overlay(
-                                Circle()
-                                    .stroke(Color.white, lineWidth: 2)
-                            )
-                            .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+                    VStack(spacing: 12) {
+                        // Profile button
+                        Button(action: {
+                            navigateToProfile = true
+                        }) {
+                            Image("ProfilePicture")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 44, height: 44)
+                                .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .stroke(Color.white, lineWidth: 2)
+                                )
+                                .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+                        }
+                        
+                        // Activity button
+                        Button(action: {
+                            navigateToNotifications = true
+                        }) {
+                            Image(systemName: "bell.fill")
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundColor(.blue)
+                                .frame(width: 44, height: 44)
+                                .background(
+                                    Circle()
+                                        .fill(Color.white)
+                                        .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+                                )
+                        }
                     }
                 }
                 .padding(.trailing, 16)
@@ -136,6 +155,9 @@ struct ContentView: View {
             }
             .navigationDestination(isPresented: $navigateToProfile) {
                 ProfileView()
+            }
+            .navigationDestination(isPresented: $navigateToNotifications) {
+                NotificationsView()
             }
             .sheet(isPresented: $showingSearchSheet) {
                 SearchSheet(searchQuery: searchText)
