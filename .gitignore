@@ -127,3 +127,9 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# Assets - Ignore image files but keep structure
+Seekly/Assets.xcassets/**/*.png
+Seekly/Assets.xcassets/**/*.jpg
+Seekly/Assets.xcassets/**/*.jpeg
+Seekly/Assets.xcassets/**/*.pdf
+Seekly/Assets.xcassets/**/*.svg

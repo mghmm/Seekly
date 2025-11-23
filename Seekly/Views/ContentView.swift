@@ -10,11 +10,13 @@ import SwiftUI
 struct ContentView: View {
     @State private var searchText = ""
     @State private var showingSearchSheet = false
+    @State private var navigateToProfile = false
     @FocusState private var isTextFieldFocused: Bool
     @State private var recenterTrigger = false
 
     var body: some View {
-        ZStack(alignment: .bottom) {
+        NavigationStack {
+            ZStack(alignment: .bottom) {
             MapView(recenterTrigger: $recenterTrigger)
             
             // Invisible tap area to dismiss keyboard
@@ -25,7 +27,55 @@ struct ContentView: View {
                 }
                 .allowsHitTesting(isTextFieldFocused)
             
-            // Recenter button
+            // Profile button (top right)
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        navigateToProfile = true
+                    }) {
+                        Image("ProfilePicture")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 44, height: 44)
+                            .clipShape(Circle())
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.white, lineWidth: 2)
+                            )
+                            .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+                    }
+                }
+                .padding(.trailing, 16)
+                .padding(.top, 60)
+                
+                Spacer()
+            }
+            
+            // Filter button (bottom left)
+            VStack {
+                Spacer()
+                HStack {
+                    Button(action: {
+                        // Functionality to be added later
+                    }) {
+                        Image(systemName: "line.3.horizontal.decrease")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.blue)
+                            .frame(width: 44, height: 44)
+                            .background(
+                                Circle()
+                                    .fill(Color.white)
+                                    .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+                            )
+                    }
+                    Spacer()
+                }
+                .padding(.leading, 16)
+                .padding(.bottom, 92) // Position above search bar
+            }
+            
+            // Recenter button (right side)
             VStack {
                 Spacer()
                 HStack {
@@ -83,9 +133,14 @@ struct ContentView: View {
             .clipShape(Capsule())
             .shadow(radius: 4)
             .padding()
-        }
-        .sheet(isPresented: $showingSearchSheet) {
-            SearchSheet(searchQuery: searchText)
+            }
+            .navigationDestination(isPresented: $navigateToProfile) {
+                ProfileView()
+            }
+            .sheet(isPresented: $showingSearchSheet) {
+                SearchSheet(searchQuery: searchText)
+            }
+            .navigationBarHidden(true)
         }
     }
 }

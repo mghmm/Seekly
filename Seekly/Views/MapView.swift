@@ -49,10 +49,8 @@ struct MapView: View {
             // Hide all default controls including compass
         }
         .ignoresSafeArea()
-        .onChange(of: recenterTrigger) { _, newValue in
-            if newValue {
-                viewModel.recenterOnUserLocation()
-            }
+        .onChange(of: recenterTrigger) { _, _ in
+            viewModel.recenterOnUserLocation()
         }
         .sheet(item: $viewModel.selectedBusiness) { business in
             BusinessDetailSheet(business: business) {

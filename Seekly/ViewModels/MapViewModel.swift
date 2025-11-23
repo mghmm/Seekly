@@ -52,7 +52,7 @@ class MapViewModel: ObservableObject {
             position = .region(
                 MKCoordinateRegion(
                     center: location,
-                    span: MKCoordinateSpan(latitudeDelta: 0.04, longitudeDelta: 0.04)
+                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
                 )
             )
         }
