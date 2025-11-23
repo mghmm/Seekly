@@ -45,3 +45,13 @@ struct Business: Identifiable, Codable, Equatable {
     }
 }
 
+// MARK: - Search Result
+struct SearchResult: Identifiable {
+    let business: Business
+    let confidence: String // "surely" or "possibly"
+    
+    var id: String {
+        business.id
+    }
+}
+

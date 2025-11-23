@@ -264,5 +264,17 @@ struct SampleData {
             business.address.localizedCaseInsensitiveContains(query)
         }
     }
+    
+    // MARK: - Dummy Search Function
+    /// Dummy search function that always returns three coffee places from sample data
+    /// Use this for UI development without implementing real search functionality
+    static func dummySearch(query: String) -> [SearchResult] {
+        // Returns the first three coffee shops with confidence values
+        return [
+            SearchResult(business: businesses[1], confidence: "surely"),    // Market Lane Coffee
+            SearchResult(business: businesses[0], confidence: "possibly"),   // Brother Baba Budan
+            SearchResult(business: businesses[2], confidence: "possibly")    // Dukes Coffee Roasters
+        ]
+    }
 }
 
