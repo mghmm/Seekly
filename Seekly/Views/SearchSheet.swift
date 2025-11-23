@@ -8,23 +8,22 @@
 import SwiftUI
 
 struct SearchSheet: View {
-    let searchQuery: String
+    @StateObject private var viewModel: SearchViewModel
     @Environment(\.dismiss) var dismiss
     
-    var searchResults: [SearchResult] {
-        // Using dummy search that always returns 3 coffee places
-        SampleData.dummySearch(query: searchQuery)
+    init(searchQuery: String) {
+        self._viewModel = StateObject(wrappedValue: SearchViewModel(initialQuery: searchQuery))
     }
     
     var body: some View {
         NavigationView {
-            List(searchResults) { result in
+            List(viewModel.searchResults) { result in
                 NavigationLink(destination: BusinessDetailView(business: result.business)) {
                     BusinessRow(result: result)
                 }
             }
             .listStyle(.plain)
-            .navigationTitle(searchQuery.isEmpty ? "Nearby Places" : searchQuery)
+            .navigationTitle(viewModel.searchQuery.isEmpty ? "Nearby Places" : viewModel.searchQuery)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

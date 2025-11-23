@@ -10,17 +10,19 @@ import MapKit
 
 struct MapView: View {
     @StateObject private var locationManager = LocationManager()
-    @State private var position: MapCameraPosition = .region(
-        MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194),
-            span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-        )
-    )
-    @State private var hasInitializedLocation = false
-    @State private var selectedBusiness: Business?
+    @StateObject private var viewModel: MapViewModel
+    @Binding var recenterTrigger: Bool
+    
+    init(recenterTrigger: Binding<Bool>) {
+        self._recenterTrigger = recenterTrigger
+        // Create the location manager and view model
+        let manager = LocationManager()
+        self._locationManager = StateObject(wrappedValue: manager)
+        self._viewModel = StateObject(wrappedValue: MapViewModel(locationManager: manager))
+    }
     
     var body: some View {
-        Map(position: $position, content: {
+        Map(position: $viewModel.position, content: {
             // User location marker
             if let location = locationManager.userLocation {
                 Annotation("", coordinate: location) {
@@ -29,15 +31,15 @@ struct MapView: View {
             }
             
             // Business markers
-            ForEach(SampleData.businesses) { business in
-                let isHidden = selectedBusiness != nil && selectedBusiness?.id != business.id
+            ForEach(viewModel.businesses) { business in
+                let isHidden = viewModel.selectedBusiness != nil && viewModel.selectedBusiness?.id != business.id
                 Annotation(isHidden ? "" : business.name, coordinate: business.coordinate.clCoordinate) {
                     BusinessMarkerView(
                         business: business,
-                        isSelected: selectedBusiness?.id == business.id,
+                        isSelected: viewModel.selectedBusiness?.id == business.id,
                         isHidden: isHidden
                     ) {
-                        selectedBusiness = business
+                        viewModel.selectBusiness(business)
                     }
                 }
             }
@@ -47,40 +49,14 @@ struct MapView: View {
             // Hide all default controls including compass
         }
         .ignoresSafeArea()
-        .onReceive(locationManager.$userLocation) { location in
-            // Only center on user location once, on initial load
-            if let location = location, !hasInitializedLocation {
-                position = .region(
-                    MKCoordinateRegion(
-                        center: location,
-                        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-                    )
-                )
-                hasInitializedLocation = true
+        .onChange(of: recenterTrigger) { _, newValue in
+            if newValue {
+                viewModel.recenterOnUserLocation()
             }
         }
-        .onChange(of: selectedBusiness) {
-            if let business = selectedBusiness {
-                // Offset the center downward to shift the marker up into the visible top 1/3
-                // The sheet covers 2/3 from bottom, so we shift center down by ~0.0025 degrees
-                let offsetCenter = CLLocationCoordinate2D(
-                    latitude: business.coordinate.clCoordinate.latitude - 0.0025,
-                    longitude: business.coordinate.clCoordinate.longitude
-                )
-                var transaction = Transaction(animation: .easeInOut(duration: 0.9))
-                withTransaction(transaction) {
-                    position = .region(
-                        MKCoordinateRegion(
-                            center: offsetCenter,
-                            span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
-                        )
-                    )
-                }
-            }
-        }
-        .sheet(item: $selectedBusiness) { business in
+        .sheet(item: $viewModel.selectedBusiness) { business in
             BusinessDetailSheet(business: business) {
-                selectedBusiness = nil
+                viewModel.deselectBusiness()
             }
         }
     }
@@ -174,6 +150,6 @@ struct BusinessMarkerView: View {
 }
 
 #Preview {
-    MapView()
+    MapView(recenterTrigger: .constant(false))
 }
 

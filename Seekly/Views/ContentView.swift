@@ -11,10 +11,11 @@ struct ContentView: View {
     @State private var searchText = ""
     @State private var showingSearchSheet = false
     @FocusState private var isTextFieldFocused: Bool
+    @State private var recenterTrigger = false
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            MapView()
+            MapView(recenterTrigger: $recenterTrigger)
             
             // Invisible tap area to dismiss keyboard
             Color.clear
@@ -23,6 +24,29 @@ struct ContentView: View {
                     isTextFieldFocused = false
                 }
                 .allowsHitTesting(isTextFieldFocused)
+            
+            // Recenter button
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        recenterTrigger.toggle()
+                    }) {
+                        Image(systemName: "location.fill")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.blue)
+                            .frame(width: 44, height: 44)
+                            .background(
+                                Circle()
+                                    .fill(Color.white)
+                                    .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+                            )
+                    }
+                }
+                .padding(.trailing, 16)
+                .padding(.bottom, 92) // Position above search bar
+            }
             
             HStack {
                 Image(systemName: "magnifyingglass")
