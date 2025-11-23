@@ -53,7 +53,7 @@ struct MapView: View {
             viewModel.recenterOnUserLocation()
         }
         .sheet(item: $viewModel.selectedBusiness) { business in
-            BusinessDetailSheet(business: business) {
+            BusinessModalView(business: business) {
                 viewModel.deselectBusiness()
             }
         }

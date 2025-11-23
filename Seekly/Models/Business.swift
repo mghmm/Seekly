@@ -21,7 +21,10 @@ struct Business: Identifiable, Codable, Equatable {
     let coordinate: Coordinate
     let address: String
     let phoneNumber: String?
+    let website: String?
+    let email: String?
     let emoji: String
+    let description: String?
     
     struct Coordinate: Codable, Equatable {
         let latitude: Double

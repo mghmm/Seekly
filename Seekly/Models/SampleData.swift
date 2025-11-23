@@ -23,7 +23,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8118, longitude: 144.9633),
             address: "359 Little Bourke St, Melbourne VIC 3000",
             phoneNumber: "(03) 9606 0449",
-            emoji: "☕️"
+            website: nil,
+            email: nil,
+            emoji: "☕️",
+            description: "A cozy laneway cafe serving specialty coffee and fresh pastries. Known for their almond croissants and friendly baristas."
         ),
         Business(
             id: "2",
@@ -38,7 +41,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8141, longitude: 144.9625),
             address: "Therry St, Melbourne VIC 3000",
             phoneNumber: "(03) 9670 3899",
-            emoji: "☕️"
+            website: "https://marketlane.com.au",
+            email: "info@marketlane.com.au",
+            emoji: "☕️",
+            description: "Award-winning coffee roaster with multiple locations across Melbourne. Famous for their signature blends and delicious almond croissants baked fresh daily."
         ),
         Business(
             id: "3",
@@ -53,7 +59,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8125, longitude: 144.9655),
             address: "247 Flinders Ln, Melbourne VIC 3000",
             phoneNumber: "(03) 9654 7373",
-            emoji: "☕️"
+            website: nil,
+            email: nil,
+            emoji: "☕️",
+            description: nil
         ),
         
         // Restaurants
@@ -70,7 +79,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8148, longitude: 144.9658),
             address: "125 Flinders Ln, Melbourne VIC 3000",
             phoneNumber: "(03) 8663 2000",
-            emoji: "🍽️"
+            website: nil,
+            email: nil,
+            emoji: "🍽️",
+            description: nil
         ),
         Business(
             id: "5",
@@ -85,7 +97,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8132, longitude: 144.9642),
             address: "180 Flinders Ln, Melbourne VIC 3000",
             phoneNumber: "(03) 9650 8688",
-            emoji: "🍽️"
+            website: nil,
+            email: nil,
+            emoji: "🍽️",
+            description: nil
         ),
         Business(
             id: "6",
@@ -100,7 +115,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8128, longitude: 144.9638),
             address: "141 Flinders Ln, Melbourne VIC 3000",
             phoneNumber: "(03) 9650 3155",
-            emoji: "🍽️"
+            website: nil,
+            email: nil,
+            emoji: "🍽️",
+            description: nil
         ),
         
         // Bars
@@ -117,7 +135,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8122, longitude: 144.9615),
             address: "20 Presgrave Pl, Melbourne VIC 3000",
             phoneNumber: nil,
-            emoji: "🍸"
+            website: nil,
+            email: nil,
+            emoji: "🍸",
+            description: nil
         ),
         Business(
             id: "8",
@@ -132,7 +153,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8145, longitude: 144.9670),
             address: "1 Malthouse Ln, Melbourne VIC 3000",
             phoneNumber: "(03) 9663 9899",
-            emoji: "🍸"
+            website: nil,
+            email: nil,
+            emoji: "🍸",
+            description: nil
         ),
         
         // Cafes & Bakeries
@@ -149,7 +173,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8160, longitude: 144.9628),
             address: "380 Lonsdale St, Melbourne VIC 3000",
             phoneNumber: "(03) 9663 7666",
-            emoji: "🥐"
+            website: nil,
+            email: nil,
+            emoji: "🥐",
+            description: nil
         ),
         Business(
             id: "10",
@@ -164,7 +191,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8155, longitude: 144.9638),
             address: "Block Arc, 282 Collins St, Melbourne VIC 3000",
             phoneNumber: "(03) 9650 2777",
-            emoji: "🥐"
+            website: nil,
+            email: nil,
+            emoji: "🥐",
+            description: nil
         ),
         
         // Fast Food & Quick Bites
@@ -181,7 +211,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8142, longitude: 144.9652),
             address: "Cnr Hardware &, Lt Bourke St, Melbourne VIC 3000",
             phoneNumber: "(03) 9078 7314",
-            emoji: "🍨"
+            website: nil,
+            email: nil,
+            emoji: "🍨",
+            description: nil
         ),
         Business(
             id: "12",
@@ -196,7 +229,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8138, longitude: 144.9618),
             address: "148 Bourke St, Melbourne VIC 3000",
             phoneNumber: "(03) 9654 8008",
-            emoji: "🍔"
+            website: nil,
+            email: nil,
+            emoji: "🍔",
+            description: nil
         ),
         
         // Shopping
@@ -213,7 +249,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8102, longitude: 144.9629),
             address: "211 La Trobe St, Melbourne VIC 3000",
             phoneNumber: "(03) 9660 3400",
-            emoji: "🛍️"
+            website: nil,
+            email: nil,
+            emoji: "🛍️",
+            description: nil
         ),
         Business(
             id: "14",
@@ -228,7 +267,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8095, longitude: 144.9653),
             address: "292 Swanston St, Melbourne VIC 3000",
             phoneNumber: "(03) 9657 3500",
-            emoji: "🛍️"
+            website: nil,
+            email: nil,
+            emoji: "🛍️",
+            description: nil
         ),
         
         // Entertainment
@@ -245,7 +287,10 @@ struct SampleData {
             coordinate: Business.Coordinate(latitude: -37.8188, longitude: 144.9691),
             address: "Fed Square, Melbourne VIC 3000",
             phoneNumber: "(03) 8663 2583",
-            emoji: "🎬"
+            website: nil,
+            email: nil,
+            emoji: "🎬",
+            description: nil
         )
     ]
     
