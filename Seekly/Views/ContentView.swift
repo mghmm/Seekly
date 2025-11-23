@@ -29,6 +29,10 @@ struct ContentView: View {
                     .foregroundColor(.secondary)
                 TextField("What are you looking for?", text: $searchText)
                     .focused($isTextFieldFocused)
+                    .onSubmit {
+                        showingSearchSheet = true
+                        isTextFieldFocused = false
+                    }
                 
                 Button(action: {
                     showingSearchSheet = true
